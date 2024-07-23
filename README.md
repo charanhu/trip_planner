@@ -1,95 +1,97 @@
-# AI Crew for Trip Planning
-## Introduction
-This project is an example using the CrewAI framework to automate the process of planning a trip if you are in doubt between different options. CrewAI orchestrates autonomous AI agents, enabling them to collaborate and execute complex tasks efficiently.
+# Trip Planner
 
-By [@joaomdmoura](https://x.com/joaomdmoura)
+Trip Planner is a Python application that uses AI agents to help plan your trips based on your origin, interests, and date range. The application interacts with Watsonx services to provide tailored travel recommendations.
 
-- [CrewAI Framework](#crewai-framework)
-- [Running the script](#running-the-script)
-- [Details & Explanation](#details--explanation)
-- [Using GPT 3.5](#using-gpt-35)
-- [Using Local Models with Ollama](#using-local-models-with-ollama)
-- [Contributing](#contributing)
-- [Support and Contact](#support-and-contact)
-- [License](#license)
+## Features
 
-## CrewAI Framework
-CrewAI is designed to facilitate the collaboration of role-playing AI agents. In this example, these agents work together to choose between different of cities and put together a full itinerary for the trip based on your preferences.
+- Selects cities based on your preferences
+- Gathers local information and activities
+- Plans travel itineraries
 
-## Running the Script
-It uses GPT-4 by default so you should have access to that to run it.
+## Prerequisites
 
-***Disclaimer:** This will use gpt-4 unless you changed it 
-not to, and by doing so it will cost you money.*
+- Python 3.11 or later
+- Access to Watsonx API
 
-- **Configure Environment**: Copy ``.env.example` and set up the environment variables for [Browseless](https://www.browserless.io/), [Serper](https://serper.dev/) and [OpenAI](https://platform.openai.com/api-keys)
-- **Install Dependencies**: Run `poetry install --no-root`.
-- **Execute the Script**: Run `poetry run python main.py` and input your idea.
+## Installation
 
-## Details & Explanation
-- **Running the Script**: Execute `python main.py`` and input your idea when prompted. The script will leverage the CrewAI framework to process the idea and generate a landing page.
-- **Key Components**:
-  - `./main.py`: Main script file.
-  - `./trip_tasks.py`: Main file with the tasks prompts.
-  - `./trip_agents.py`: Main file with the agents creation.
-  - `./tools`: Contains tool classes used by the agents.
+### Clone the Repository
 
-## Using GPT 3.5
-CrewAI allow you to pass an llm argument to the agent construtor, that will be it's brain, so changing the agent to use GPT-3.5 instead of GPT-4 is as simple as passing that argument on the agent you want to use that LLM (in `main.py`).
-```python
-from langchain.chat_models import ChatOpenAI
+Start by cloning the repository to your local machine:
 
-llm = ChatOpenAI(model='gpt-3.5') # Loading GPT-3.5
-
-def local_expert(self):
-	return Agent(
-		role='Local Expert at this city',
-		goal='Provide the BEST insights about the selected city',
-		backstory="""A knowledgeable local guide with extensive information
-		about the city, it's attractions and customs""",
-		tools=[
-			SearchTools.search_internet,
-			BrowserTools.scrape_and_summarize_website,
-		],
-		llm=llm, # <----- passing our llm reference here
-		verbose=True
-	)
+```bash
+git clone https://github.com/charanhu/trip_planner.git
+cd trip_planner
 ```
 
-## Using Local Models with Ollama
-The CrewAI framework supports integration with local models, such as Ollama, for enhanced flexibility and customization. This allows you to utilize your own models, which can be particularly useful for specialized tasks or data privacy concerns.
+### Create a Virtual Environment
 
-### Setting Up Ollama
-- **Install Ollama**: Ensure that Ollama is properly installed in your environment. Follow the installation guide provided by Ollama for detailed instructions.
-- **Configure Ollama**: Set up Ollama to work with your local model. You will probably need to [tweak the model using a Modelfile](https://github.com/jmorganca/ollama/blob/main/docs/modelfile.md), I'd recommend adding `Observation` as a stop word and playing with `top_p` and `temperature`.
+Create a virtual environment to manage dependencies:
 
-### Integrating Ollama with CrewAI
-- Instantiate Ollama Model: Create an instance of the Ollama model. You can specify the model and the base URL during instantiation. For example:
-
-```python
-from langchain.llms import Ollama
-ollama_openhermes = Ollama(model="agent")
-# Pass Ollama Model to Agents: When creating your agents within the CrewAI framework, you can pass the Ollama model as an argument to the Agent constructor. For instance:
-
-def local_expert(self):
-	return Agent(
-		role='Local Expert at this city',
-		goal='Provide the BEST insights about the selected city',
-		backstory="""A knowledgeable local guide with extensive information
-		about the city, it's attractions and customs""",
-		tools=[
-			SearchTools.search_internet,
-			BrowserTools.scrape_and_summarize_website,
-		],
-		llm=ollama_openhermes, # Ollama model passed here
-		verbose=True
-	)
+```bash
+python -m venv venv
 ```
 
-### Advantages of Using Local Models
-- **Privacy**: Local models allow processing of data within your own infrastructure, ensuring data privacy.
-- **Customization**: You can customize the model to better suit the specific needs of your tasks.
-- **Performance**: Depending on your setup, local models can offer performance benefits, especially in terms of latency.
+### Activate the Virtual Environment
+
+Activate the virtual environment:
+
+- **On Windows:**
+
+  ```bash
+  .\venv\Scripts\activate
+  ```
+
+- **On macOS and Linux:**
+
+  ```bash
+  source venv/bin/activate
+  ```
+
+### Install Requirements
+
+Install the required Python packages using `requirements.txt`:
+
+```bash
+pip install -r requirements.txt
+```
+
+### Create Environment Variables
+
+Create a `.env` file in the root directory and add the following variables with your Watsonx API credentials:
+
+```env
+WATSONX_API=<your_watsonx_api_key>
+WATSONX_URL=<your_watsonx_api_url>
+WATSONX_PID=<your_watsonx_project_id>
+```
+
+## Usage
+
+To run the application, navigate to the `src` directory and execute the `main.py` script:
+
+```bash
+cd src
+python main.py
+```
+
+Follow the prompts to enter your travel preferences and receive your customized trip plan.
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
-This project is released under the MIT License.
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+
+### Explanation
+
+- **Project Overview**: Provides a brief description of what the project does.
+- **Prerequisites**: Lists the software and tools needed to run the application.
+- **Installation Steps**: Provides step-by-step instructions to set up the environment, including cloning the repository, creating and activating a virtual environment, installing dependencies, and setting up environment variables.
+- **Usage**: Explains how to run the application.
+- **Contributing and License**: Provides information on how to contribute and the project's license.
+
+This `README.md` provides clear instructions for setting up and running the Trip Planner application. Adjust the placeholders in the `.env` file section with your actual Watsonx API credentials.
