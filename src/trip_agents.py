@@ -1,6 +1,4 @@
 from crewai import Agent
-from langchain.llms import OpenAI
-
 from tools.browser_tools import BrowserTools
 from tools.calculator_tools import CalculatorTools
 from tools.search_tools import SearchTools
@@ -18,6 +16,7 @@ class TripAgents:
                 SearchTools.search_internet,
                 BrowserTools.scrape_and_summarize_website,
             ],
+            llm=WATSONX_LLM,
             verbose=True,
         )
 
@@ -47,5 +46,6 @@ class TripAgents:
                 BrowserTools.scrape_and_summarize_website,
                 CalculatorTools.calculate,
             ],
+            llm=WATSONX_LLM,
             verbose=True,
         )
